@@ -20,9 +20,5 @@ BEGIN
     -- Add new correction
     INSERT INTO corrections (user_id, project_id, score) VALUES (user_id, project_id, score);
     
-    -- Update user's average score
-    UPDATE users
-    SET average_score = (SELECT AVG(score) FROM corrections WHERE user_id = users.id)
-    WHERE id = user_id;
 END$$
 DELIMITER ;
