@@ -4,7 +4,7 @@
 
 if __name__ != "__main__":
     def top_students(mongo_collection):
-
+        """ return list of top students """
         pipeline = [
             {
                 "$addFields": {

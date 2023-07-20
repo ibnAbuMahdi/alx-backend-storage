@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """ log doc parsing """
-from pymongo import MongoClient 
+from pymongo import MongoClient
 
 if __name__ != '__main__':
     client = MongoClient('mongodb://127.0.0.1:27017')
