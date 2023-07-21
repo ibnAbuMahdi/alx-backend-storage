@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+""" Caching using redis """
 import redis
 import uuid
 from typing import Union, Callable
@@ -5,8 +7,10 @@ from functools import wraps
 
 
 def count_calls(method: Callable) -> Callable:
+    """ the count calls decorator """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
+        """ the wrapper """
         key = method.__qualname__
         self._redis.incr(key)
         return method(self, *args, **kwargs)
@@ -14,8 +18,10 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
+    """ call history decorator """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
+        """ the wrapper """
         inputs_key = method.__qualname__ + ':inputs'
         outputs_key = method.__qualname__ + ':outputs'
 
@@ -30,19 +36,23 @@ def call_history(method: Callable) -> Callable:
 
 
 class Cache:
+    """ the Cache class """
     def __init__(self):
+        """ init method """
         self._redis = redis.Redis()
         self._redis.flushdb()
 
     @count_calls
     @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
+        """ store data """
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
 
     def get(self, key: str,
             fn: Callable = None) -> Union[str, bytes, int, float, None]:
+        """ get """
         if not self._redis.exists(key):
             return None
 
@@ -53,9 +63,11 @@ class Cache:
         return fn(data)
 
     def get_str(self, key: str) -> Union[str, None]:
+        """ get string """
         return self.get(key, lambda x: x.decode('utf-8'))
 
     def get_int(self, key: str) -> Union[int, None]:
+        """ get int """
         return self.get(key, int)
 
 
