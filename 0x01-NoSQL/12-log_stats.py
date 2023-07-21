@@ -7,13 +7,13 @@ if __name__ != '__main__':
     col = client.logs.nginx
     no = col.find().count()
 
-    get = col.find({'method': 'GET'}).count()
-    post = col.find({'method': 'POST'}).count()
-    put = col.find({'method': 'PUT'}).count()
-    patch = col.find({'method': 'PATCH'}).count()
-    delete = col.find({'method': 'DELETE'}).count()
+    get = col.count_documents({'method': 'GET'})
+    post = col.count_documents({'method': 'POST'})
+    put = col.count_documents({'method': 'PUT'})
+    patch = col.count_documents({'method': 'PATCH'})
+    delete = col.count_documents({'method': 'DELETE'})
 
-    get_path = col.find({'method': 'GET', 'path': '/status'}).count()
+    get_path = col.count_documents({'method': 'GET', 'path': '/status'})
 
     print(str(no) + ' logs')
     print('Methods:')
