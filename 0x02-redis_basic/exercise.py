@@ -60,6 +60,7 @@ class Cache:
 
 
 def replay(method: Callable):
+    """ replay history of method calls """
     red = redis.Redis.from_url('redis://localhost:6379/0')
     inputs_key = method.__qualname__ + ':inputs'
     outputs_key = method.__qualname__ + ':outputs'
@@ -67,8 +68,10 @@ def replay(method: Callable):
     call_count = red.llen(inputs_key)
 
     print(f"{method.__qualname__} was called {call_count} times:")
+    input_values = red.lrange(inputs_key, 0, call_count - 1)
+    output_values = red.lrange(outputs_key, 0, call_count - 1)
 
-    for i in range(call_count):
-        inputs = red.lindex(inputs_key, i).decode()
-        output = red.lindex(outputs_key, i).decode()
-        print(f"{method.__qualname__}(*{eval(inputs)}) -> {output}")
+    for inputs, output in zip(input_values, output_values):
+        inputs_str = inputs.decode()
+        output_str = output.decode()
+        print(f"{method.__qualname__}(*{eval(inputs_str)}) -> {output_str}")
