@@ -2,7 +2,7 @@
 """ log doc parsing """
 from pymongo import MongoClient
 
-if __name__ != '__main__':
+if __name__ == '__main__':
     client = MongoClient("mongodb://127.0.0.1:27017")
     col = client.logs.nginx
     no = col.count_documents({})
@@ -17,9 +17,9 @@ if __name__ != '__main__':
 
     print(str(no) + " logs")
     print("Methods:")
-    print("\t method GET: " + str(get))
-    print("\t method POST: " + str(post))
-    print("\t method PUT: " + str(put))
-    print("\t method PATCH: " + str(patch))
-    print("\t method DELETE: " + str(delete))
+    print("\tmethod GET: " + str(get))
+    print("\tmethod POST: " + str(post))
+    print("\tmethod PUT: " + str(put))
+    print("\tmethod PATCH: " + str(patch))
+    print("\tmethod DELETE: " + str(delete))
     print(str(get_path) + " status check")
